@@ -7,8 +7,8 @@ function createGenome(inputs, outputs) {
 		mutationPower: 2.5,
 		weightCap: 8,
 		randomizeWeightProb: 0.1,
-		mutateNodeProb: 0.03,
-		mutateConnectionProb: 0.02,
+		mutateNodeProb: 0.3,
+		mutateConnectionProb: 0.5,
 		recurrentProb: 0.1
 	};
 	for (var i = 0; i < inputs; i++) {
