@@ -315,7 +315,20 @@ var population = {
 	randomNodeSelection: false,
 	randomSplitGeneTries: 20,
 	mutateConnectionTries: 20,
-	hiddenAcivationFunc: NEAT.Activations.leakyReLU
+	hiddenAcivationFunc: NEAT.Activations.leakyReLU,
+	reenableProb: 0.025,
+	toggleEnableProb: 0.03
 };
 var genome = createGenome(3, 1);
 genome.population = population;
+// population.mutateNodeProb = 1;
+// genome.mutate();
+// genome.mutate();
+// genome.mutate();
+// population.mutateNodeProb = 0;
+// population.mutateConnectionProb = 1;
+// genome.mutate();
+// genome.mutate();
+// genome.mutate();
+// genome.mutate();
+// genome.mutate();
