@@ -200,14 +200,16 @@ function XORTest(populationNum, amount, genome) {
 			shuffle(inputs);
 			var genome = genomes[j];
 			genome.fitness = 0;
+
 			var network = new NEAT.Network(genome);
+			network.calculateDepth();
 
 			for (var k = 0; k < 4; k++) {
 				var input = inputs[k];
 
 				network.feedInputs(input);
 
-				for (var l = 0; l < 5; l++) {
+				for (var l = 0; l < network.depth; l++) {
 					network.activate();
 				}
 				genome.fitness += evaluateOutput(network.outputs[0].output, input);
