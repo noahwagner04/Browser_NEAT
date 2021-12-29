@@ -304,6 +304,11 @@ function shuffle(array) {
 
 	return array;
 }
+
+function exportGenome(genome) {
+	genome.phenotype = undefined;
+	return JSON.stringify(genome);
+}
 var population = {
 	mutateWeightsProb: 0.8,
 	mutationPower: 2.5,
@@ -321,14 +326,3 @@ var population = {
 };
 var genome = createGenome(3, 1);
 genome.population = population;
-// population.mutateNodeProb = 1;
-// genome.mutate();
-// genome.mutate();
-// genome.mutate();
-// population.mutateNodeProb = 0;
-// population.mutateConnectionProb = 1;
-// genome.mutate();
-// genome.mutate();
-// genome.mutate();
-// genome.mutate();
-// genome.mutate();
