@@ -184,10 +184,10 @@ function testNetworkConstruction(trials) {
 function XORTest(populationNum, amount, genome) {
 	var genomes = [];
 	var inputs = [
-		[1, 0, 0],
-		[1, 1, 0],
-		[1, 0, 1],
-		[1, 1, 1]
+		[0, 0],
+		[1, 0],
+		[0, 1],
+		[1, 1]
 	];
 	for (var i = 0; i < populationNum; i++) {
 		genomes.push(genome.clone().mutate());
@@ -241,9 +241,9 @@ function XORTest(populationNum, amount, genome) {
 
 function evaluateOutput(output, input) {
 	var answer = 0;
-	if ((input[1] === 1 && input[2] === 0) || (input[1] === 0 && input[2] === 1)) {
+	if ((input[0] === 1 && input[1] === 0) || (input[0] === 0 && input[1] === 1)) {
 		answer = 1;
-	} else if ((input[1] === 0 && input[2] === 0) || (input[1] === 1 && input[2] === 1)) {
+	} else if ((input[0] === 0 && input[1] === 0) || (input[0] === 1 && input[1] === 1)) {
 		answer = 0;
 	}
 	return 1 - Math.abs(answer - output);
@@ -265,10 +265,10 @@ function naturallySelectGenome(genomes) {
 function testNetworkPreformance(network) {
 	var score = 0;
 	var inputs = [
-		[1, 0, 0],
-		[1, 1, 0],
-		[1, 0, 1],
-		[1, 1, 1]
+		[0, 0],
+		[1, 0],
+		[0, 1],
+		[1, 1]
 	];
 	for (var k = 0; k < 4; k++) {
 		var input = inputs[k];
@@ -324,7 +324,8 @@ var population = {
 	mutateConnectionTries: 20,
 	hiddenAcivationFunc: NEAT.Activations.leakyReLU,
 	reenableProb: 0.025,
-	toggleEnableProb: 0.03
+	toggleEnableProb: 0.03,
+	initialConnectivity: 1
 };
 var genome = createGenome(3, 1);
 genome.population = population;
