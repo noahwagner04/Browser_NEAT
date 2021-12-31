@@ -22,7 +22,8 @@ function createGenome(inputs, outputs, population) {
 	nodeGenes.forEach(nodeGene => {
 		if (nodeGene.type === NEAT.nodeTypes.OUTPUT) return;
 		nodeGenes.forEach(nodeGene1 => {
-			if (nodeGene1 === nodeGene ||
+			if (Math.random() > population.initialConnectivity ||
+				nodeGene1 === nodeGene ||
 				nodeGene1.type === NEAT.nodeTypes.INPUT ||
 				nodeGene1.type === NEAT.nodeTypes.BIAS) return;
 			var gene = new NEAT.Gene(nodeGene, nodeGene1, (Math.random() * 2 - 1) * 5, false, true);
@@ -325,7 +326,8 @@ var population = {
 	hiddenAcivationFunc: NEAT.Activations.leakyReLU,
 	reenableProb: 0.025,
 	toggleEnableProb: 0.03,
-	initialConnectivity: 1
+	initialConnectivity: 1,
+	inputCount: 3,
+	outputCount:1
 };
-var genome = createGenome(3, 1);
-genome.population = population;
+var genome = createGenome(3, 1, population);
