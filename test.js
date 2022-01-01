@@ -182,62 +182,42 @@ function testNetworkConstruction(trials) {
 	console.log("test succeeded");
 }
 
-function XORTest(populationNum, amount, genome) {
-	var genomes = [];
+function XORTest(population, amount) {
 	var inputs = [
 		[0, 0],
 		[1, 0],
 		[0, 1],
 		[1, 1]
 	];
-	for (var i = 0; i < populationNum; i++) {
-		genomes.push(genome.clone().mutate());
-	}
-	var winner = undefined;
-	var heighestFit = 0;
 	for (var i = 0; i < amount; i++) {
-		// evaluate the current gen
-		for (var j = 0; j < genomes.length; j++) {
+		for (var j = 0; j < population.size; j++) {
 			shuffle(inputs);
-			var genome = genomes[j];
-			genome.fitness = 0;
-
-			var network = new NEAT.Network(genome);
-			network.calculateDepth();
+			var entity = population.entities[j];
 
 			for (var k = 0; k < 4; k++) {
 				var input = inputs[k];
 
-				network.feedInputs(input);
+				entity.feedSensoryInputs(input);
 
-				for (var l = 0; l < network.depth; l++) {
-					network.activate();
+				for (var l = 0; l < entity.brain.depth; l++) {
+					entity.brain.activate();
 				}
-				genome.fitness += evaluateOutput(network.outputs[0].output, input);
-				network.reset();
+
+				entity.fitness += evaluateOutput(entity.brain.outputs[0].output, input);
+				entity.brain.reset();
 			}
-			genome.fitness *= genome.fitness;
-			if (genome.fitness > heighestFit) {
-				heighestFit = genome.fitness;
-				winner = genome;
+			entity.fitness *= entity.fitness;
+
+			if (population.highestFitness > 15.5) {
 				console.log(i);
-				if (heighestFit > 15.25) {
-					console.log("training complete");
-					return winner;
-				}
+				console.log("training complete");
+				return population.best;
 			}
 		}
-		if (i === amount - 1) break;
-		// breed the next gen
-		var tempGenomes = [];
-		for (var j = 0; j < populationNum; j++) {
-			var selected = naturallySelectGenome(genomes);
-			tempGenomes[j] = selected.clone().mutate();
-		}
-		genomes = tempGenomes;
+		population.calcNextGen();
 	}
 	console.log("training failed");
-	return winner;
+	return population.best;
 }
 
 function evaluateOutput(output, input) {
@@ -248,19 +228,6 @@ function evaluateOutput(output, input) {
 		answer = 0;
 	}
 	return 1 - Math.abs(answer - output);
-}
-
-function naturallySelectGenome(genomes) {
-	var sum = 0;
-	var cumulativeBias = genomes.map(function(x) {
-		sum += x.fitness;
-		return sum;
-	});
-	var choice = Math.random() * sum;
-
-	for (var i = 0; i < cumulativeBias.length; i++) {
-		if (cumulativeBias[i] > choice) return genomes[i];
-	}
 }
 
 function testNetworkPreformance(network) {
@@ -310,24 +277,7 @@ function shuffle(array) {
 
 function exportGenome(genome) {
 	genome.phenotype = undefined;
+	genome.population = undefined;
 	return JSON.stringify(genome);
 }
-var population = {
-	mutateWeightsProb: 0.8,
-	mutationPower: 2.5,
-	weightCap: 8,
-	randomizeWeightProb: 0.1,
-	mutateNodeProb: 0.03,
-	mutateConnectionProb: 0.05,
-	recurrentProb: 0,
-	randomNodeSelection: false,
-	randomSplitGeneTries: 20,
-	mutateConnectionTries: 20,
-	hiddenAcivationFunc: NEAT.Activations.leakyReLU,
-	reenableProb: 0.025,
-	toggleEnableProb: 0.03,
-	initialConnectivity: 1,
-	inputCount: 3,
-	outputCount:1
-};
-var genome = createGenome(3, 1, population);
+var population = new NEAT.Population(config);
