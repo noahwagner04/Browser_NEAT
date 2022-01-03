@@ -3,7 +3,7 @@ var config = {
 	mutation: {
 
 		node: {
-			probability: 0.01,
+			probability: 0.03,
 			random: false,
 			randomTries: 20,
 		},
@@ -25,7 +25,7 @@ var config = {
 	},
 
 	network: {
-		inputs: 3,
+		inputs: 2,
 		outputs: 1,
 		hiddenActivation: NEAT.Activations.leakyReLU,
 		initialConnectivity: 1,
